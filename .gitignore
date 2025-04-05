@@ -1,0 +1,43 @@
+# Byte-compiled Python files
+__pycache__/
+*.py[cod]
+
+# Environment variables and secrets
+.env
+
+# SQLite database files
+*.db
+
+# Migrations
+alembic/versions/*.pyc
+alembic/versions/__pycache__/
+
+# Python virtual environments
+.venv/
+env/
+venv/
+
+# IDE/editor configuration files
+.idea/
+.vscode/
+*.swp
+
+# macOS specific files
+.DS_Store
+
+# Logs
+*.log
+
+# Python egg files
+*.egg
+*.egg-info/
+
+# Distribution / packaging
+.Python
+build/
+dist/
+*.egg-info/
+
+# Coverage reports
+.coverage
+htmlcov/
