@@ -11,15 +11,19 @@ router = APIRouter()
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     try:
-        new_user = create_new_user(user.username, user.password, db, user.role)
+        new_user = create_new_user(user.username, user.password, db)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return new_user
 
-@router.get("", response_model=list[UserResponse])
+@router.get("/", response_model=list[UserResponse])
 def list_users(db: Session = Depends(get_db), current_user: User = Depends(require_role("admin"))):
     return list_all_users(db)
 
+@router.get("/me", response_model=UserResponse)
+def get_current_user(db: Session = Depends(get_db), current_user: User = Depends(require_role("user"))):
+    return current_user
+    
 @router.get("/{user_id}", response_model=UserResponse)
 def get_user(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(require_role("admin"))):
     user = get_user_by_id(user_id, db)
@@ -50,3 +54,4 @@ def update_password(user_id: int, user: UserCreate, db: Session = Depends(get_db
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     return updated_user
+
