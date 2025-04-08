@@ -1,17 +1,24 @@
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-from app.models import User
+from app.models import User, LoginAttempt
 from app.security import verify_password, create_access_token
 import os
 
-SECRET_KEY = os.getenv("SECRET_KEY", "supersecret")
+SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def authenticate_user(username: str, password: str, db: Session):
     user = db.query(User).filter(User.username == username).first()
-    if not user or not verify_password(password, user.password):
+    login_attempt = LoginAttempt(username=username, success=False)
+    if not user or not verify_password(password, user.password_hash):
+        db.add(login_attempt)
+        db.commit()
         return None
+    
+    login_attempt.success = True
+    db.add(login_attempt)
+    db.commit()
     return user
 
 def create_auth_token(user: User):
