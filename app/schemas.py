@@ -1,4 +1,3 @@
-# schemas.py
 from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
 from typing import Optional
@@ -27,7 +26,7 @@ class UserCreate(UserBase):
 class UserResponse(UserBase):
     id: int
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 class LoginRequest(BaseModel):
