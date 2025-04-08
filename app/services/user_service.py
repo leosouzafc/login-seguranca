@@ -2,9 +2,10 @@ from sqlalchemy.orm import Session
 from app.models import User
 from app.security import hash_password
 
-def create_new_user(username: str, password: str, db: Session, role: str):
+def create_new_user(username: str, password: str, db: Session):
     if db.query(User).filter(User.username == username).first():
         raise ValueError("Usuário já existe.")
+    role = "admin" if db.query(User).count() == 0 else "user"
     hashed_password = hash_password(password)
     new_user = User(username=username, password_hash=hashed_password, role=role)
     db.add(new_user)
