@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>API User Interface</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Interface de Usuários</h1>
+      <div id="login">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Usuário" />
+        <input type="password" id="password" placeholder="Senha" />
+        <button onclick="login()">Entrar</button>
+        <div id="login-message"></div>
+      </div>
+      <div id="register">
+        <h2>Registrar</h2>
+        <input type="text" id="new-username" placeholder="Novo Usuário" />
+        <input type="password" id="new-password" placeholder="Nova Senha" />
+        <button onclick="register()">Registrar</button>
+        <div id="register-message"></div>
+      </div>
+      <div id="users">
+        <h2>Usuários</h2>
+        <button onclick="fetchUsers()">Buscar Todos os Usuários</button>
+        <div id="users-list"></div>
+      </div>
+
+      <div id="my-info">
+        <h2>Minhas Informações</h2>
+        <button onclick="fetchMyInfo()">Buscar Minhas Informações</button>
+        <div id="my-info-details"></div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
