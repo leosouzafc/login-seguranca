@@ -30,11 +30,7 @@ const Navbar = () => {
             Home
           </a>
         </li>
-        <li>
-          <a className={styles.link} href="/login">
-            Login
-          </a>
-        </li>
+        <li></li>
         <li>
           <a className={styles.link} href="/register">
             Register
@@ -87,13 +83,17 @@ const Navbar = () => {
         </li>
       </ul>
 
-      {user && (
+      {user ? (
         <div className={styles.loggedUser}>
           Logado como: <strong>{user.username}</strong> ({user.role})
           <button className={styles.logoutBtn} onClick={handleLogout}>
             Logout
           </button>
         </div>
+      ) : (
+        <a className={styles.link} href="/login">
+          Login
+        </a>
       )}
     </nav>
   );
