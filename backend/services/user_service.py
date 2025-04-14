@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models import User
-from app.security import hash_password
+from backend.models.user import User
+from backend.core.security import hash_password
 
 def create_new_user(username: str, password: str, db: Session):
     if db.query(User).filter(User.username == username).first():
