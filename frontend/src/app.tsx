@@ -1,11 +1,11 @@
 import { lazy, LocationProvider, ErrorBoundary, Router } from "preact-iso";
 import Navbar from "./components/Navbar/Navbar";
 
-const Login = lazy(() => import("./components/Login"));
-const Register = lazy(() => import("./components/Register"));
-const UsersList = lazy(() => import("./components/UsersList"));
-const MyInfo = lazy(() => import("./components/UserInfo"));
-const Home = lazy(() => import("./components/Home"));
+const Login = lazy(() => import("./components/pages/Login"));
+const Register = lazy(() => import("./components/pages/Register"));
+const UsersList = lazy(() => import("./components/pages/UsersList"));
+const MyInfo = lazy(() => import("./components/pages/UserInfo"));
+const Home = lazy(() => import("./components/pages/Home"));
 
 const App = () => (
   <LocationProvider>
