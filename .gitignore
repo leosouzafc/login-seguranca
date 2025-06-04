@@ -7,6 +7,10 @@ __pycache__/
 
 # SQLite database files
 *.db
+*.sqlite3
+*.db-journal
+*.bak
+*.tmp
 
 # Migrations
 alembic/versions/*.pyc
@@ -17,16 +21,35 @@ alembic/versions/__pycache__/
 env/
 venv/
 
+# Node.js (frontend)
+node_modules/
+dist/
+dist-ssr/
+.vite/
+.npm/
+.yarn/
+.pnpm-debug.log
+*.local
+
 # IDE/editor configuration files
 .idea/
 .vscode/
 *.swp
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 
 # macOS specific files
 .DS_Store
 
 # Logs
 *.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
 # Python egg files
 *.egg
@@ -41,3 +64,8 @@ dist/
 # Coverage reports
 .coverage
 htmlcov/
+
+# Temporary files
+.pytest_cache/
+*~
+.directory
