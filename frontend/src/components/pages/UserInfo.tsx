@@ -7,13 +7,9 @@ function UserInfo() {
   const [error, setError] = useState("");
 
   const fetchMyInfo = async () => {
-    const token = localStorage.getItem("token");
     try {
       const response = await fetch(`${API_URL}/users/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        credentials: "include",
       });
       const data = await response.json();
       if (!response.ok) {

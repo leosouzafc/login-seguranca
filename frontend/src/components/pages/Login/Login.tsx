@@ -40,10 +40,18 @@ function Login() {
       method: "POST",
       body: formData,
       credentials: "include",
+      headers: {
+        Accept: "application/json",
+      },
     });
 
+    console.log(
+      "Response headers:",
+      Object.fromEntries(response.headers.entries())
+    );
+    console.log("Response status:", response.status);
     const result = await response.json();
-    console.log(result);
+    console.log("Response body:", result);
     if (response.ok) {
       showToast("Autenticado com sucesso!", "success");
       // Armazena as informações do usuário
