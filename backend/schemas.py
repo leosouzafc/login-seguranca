@@ -23,8 +23,12 @@ class UserCreate(UserBase):
             raise HTTPException(status_code=400, detail='A senha deve ter entre 8 e 100 caracteres.')
         return value
 
+class UserUpdate(BaseModel):
+    password: Optional[str] = None
+    role: Optional[str] = None
+
 class UserResponse(UserBase):
-    id: int
+    id: str
 
     class ConfigDict:
         from_attributes = True
@@ -34,10 +38,16 @@ class LoginRequest(BaseModel):
     password: str
 
 class LoginAttemptResponse(BaseModel):
+    id: int
     username: str
     success: bool
     timestamp: datetime
 
+    class Config:
+        from_attributes = True
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
+    role: str
+    username: str

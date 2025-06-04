@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from backend.dependencies.auth import get_db
-from backend.schemas import UserCreate, UserResponse
+from backend.schemas import UserCreate, UserResponse, UserUpdate
 from backend.models.user import User
 from backend.services.user_service import (create_new_user, list_all_users, get_user_by_id, delete_user, update_user_password, update_user_role)
 from backend.dependencies.auth import require_role
@@ -11,6 +11,8 @@ router = APIRouter()
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     try:
+        if not user.username or not user.password:
+            raise ValueError("Usuário e senha são obrigatórios.")
         new_user = create_new_user(user.username, user.password, db)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -40,18 +42,15 @@ def remove_user(user_id: int, db: Session = Depends(get_db), current_user: User 
     return user
 
 @router.put("/{user_id}", response_model=UserResponse)
-def update_role(user_id: int, user: UserCreate, db: Session = Depends(get_db), current_user: User = Depends(require_role("admin"))):
+def update_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db), current_user: User = Depends(require_role("admin"))):
     try:
-        updated_role = update_user_role(user_id, user, db)
+        if user.password:
+            updated_user = update_user_password(user_id, user, db)
+        elif user.role:
+            updated_user = update_user_role(user_id, user, db)
+        else:
+            raise HTTPException(status_code=400, detail="Nenhum campo para atualizar")
+        return updated_user
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
-    return updated_role
-
-@router.put("/{user_id}", response_model=UserResponse)
-def update_password(user_id: int, user: UserCreate, db: Session = Depends(get_db), current_user: User = Depends(require_role("admin"))):
-    try:
-        updated_user = update_user_password(user_id, user, db)
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    return updated_user
 

@@ -7,6 +7,7 @@ from backend.schemas import UserCreate, UserResponse, TokenResponse
 from backend.services.user_service import create_new_user
 from backend.core.security import create_access_token
 from backend.dependencies.auth import get_current_user
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
@@ -25,23 +26,28 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         )
     
     access_token = create_access_token(data={"sub": user.username})
+    print(f"Generated token: {access_token}")  # Debug log
     
-    response = Response(content="Login successful")
-    response.set_cookie(
-        key="token",
-        value=access_token,
-        httponly=True,  
-        secure=False,  #only false for local development
-        samesite="lax",
-        max_age=3600
-    )
-    
-    return {
+    response = JSONResponse(content={
         "access_token": access_token,
         "token_type": "bearer",
         "role": user.role,           
         "username": user.username    
-    }
+    })
+    response.set_cookie(
+        key="token",
+        value=access_token,
+        httponly=True,
+        secure=False,  # Set to False for local development
+        samesite="lax",  # Changed from "lax" to "none" for local development
+        max_age=3600,
+        path="/",
+        domain="localhost"  # Explicitly set domain
+    )
+    
+    print("Cookie headers:", response.headers.getlist("set-cookie"))  # Debug log
+    
+    return response
 
 @router.post("/logout")
 def logout(response: Response):
