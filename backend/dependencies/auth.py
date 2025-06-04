@@ -5,10 +5,10 @@ from backend.database import get_db
 from backend.models.user import User
 from backend.core.security import decode_access_token
 from fastapi.security import OAuth2PasswordBearer
+from fastapi import Request
+from datetime import datetime
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
-
-from fastapi import Request
 
 def get_current_user(request: Request, db: Session = Depends(get_db)):
     token = request.cookies.get("token")
@@ -17,12 +17,22 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
         detail="Token inválido ou expirado",
         headers={"WWW-Authenticate": "Bearer"},
     )
+    
     if not token:
         raise credentials_exception
 
     payload = decode_access_token(token)
-    if payload is None or "sub" not in payload:
+    if payload is None:
         raise credentials_exception
+        
+    if "sub" not in payload:
+        raise credentials_exception
+        
+    # Check if token is expired
+    if "exp" in payload:
+        exp = datetime.fromtimestamp(payload["exp"])
+        if datetime.now() > exp:
+            raise credentials_exception
 
     user = db.query(User).filter(User.username == payload["sub"]).first()
     if user is None:

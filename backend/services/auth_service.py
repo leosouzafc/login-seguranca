@@ -5,9 +5,9 @@ from backend.models.login_attempt import LoginAttempt
 from backend.core.security import verify_password, create_access_token
 import os
 
-SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
 
 def authenticate_user(username: str, password: str, db: Session):
     user = db.query(User).filter(User.username == username).first()
@@ -20,8 +20,10 @@ def authenticate_user(username: str, password: str, db: Session):
     login_attempt.success = True
     db.add(login_attempt)
     db.commit()
-
     return user
 
 def create_auth_token(user: User):
     return create_access_token({"sub": user.username})
+
+
+
