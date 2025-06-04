@@ -1,8 +1,6 @@
-from sqlalchemy import Column, Integer, String,Boolean,DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
 import datetime
-from sqlalchemy.orm import declarative_base
-
-Base = declarative_base()
+from . import Base
 
 class LoginAttempt(Base):
     __tablename__ = "login_attempts"

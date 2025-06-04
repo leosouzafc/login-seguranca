@@ -1,16 +1,16 @@
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime, timezone
-
-Base = declarative_base()
+import secrets
+from . import Base
 
 class Session(Base):
     __tablename__ = "sessions"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True, default=lambda: secrets.token_urlsafe(32))
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
     is_active = Column(Boolean, default=True)
-
+    last_activity_at = Column(DateTime, default=datetime.now(timezone.utc))
+    expires_at = Column(DateTime)
 
     user = relationship("User")
