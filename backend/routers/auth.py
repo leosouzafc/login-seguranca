@@ -37,16 +37,13 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     response.set_cookie(
         key="token",
         value=access_token,
-        httponly=True,
+        httponly=True, # HttpOnly to prevent JavaScript access
         secure=False,  # Set to False for local development
-        samesite="lax",  # Changed from "lax" to "none" for local development
+        samesite="lax",  # Lax for cross-site requests but safe or strict for production
         max_age=3600,
         path="/",
-        domain="localhost"  # Explicitly set domain
     )
-    
-    print("Cookie headers:", response.headers.getlist("set-cookie"))  # Debug log
-    
+        
     return response
 
 @router.post("/logout")
